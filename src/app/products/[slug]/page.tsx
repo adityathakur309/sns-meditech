@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AnimatedSection } from "@/components/AnimatedSection";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/Button";
 import { CTA } from "@/components/CTA";
 import { ProductGallery } from "@/components/ProductGallery";
 import { ProductGrid } from "@/components/ProductGrid";
+import { partners } from "@/data/partners";
 import { getProduct, getRelatedProducts, products } from "@/data/products";
 import { getSolution } from "@/data/solutions";
 import { pageMetadata } from "@/lib/seo";
@@ -34,6 +36,13 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
     .map((item) => getSolution(item))
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
+  const partnerSlug = partners.find(
+    (item) =>
+      item.name === product.partner ||
+      (product.partner === "Dräger" && item.slug === "draeger") ||
+      (product.partner === "Erbe" && item.slug === "erbe"),
+  )?.slug;
+
   return (
     <>
       <section className="bg-mist pt-28 pb-16 sm:pt-32">
@@ -41,29 +50,38 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
           <Breadcrumbs items={[{ label: "Products", href: "/products" }, { label: product.name }]} />
           <div className="mt-8 grid gap-10 lg:grid-cols-2">
             <ProductGallery images={product.gallery} name={product.name} />
-            <div>
+            <AnimatedSection>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
                 {product.category}
               </p>
               <h1 className="mt-3 font-serif text-4xl text-ink sm:text-5xl">{product.name}</h1>
-              <p className="mt-2 text-sm text-muted">Manufacturer brand in catalogue: {product.partner}</p>
+              <p className="mt-2 text-sm text-muted">
+                Manufacturer brand in catalogue:{" "}
+                {partnerSlug ? (
+                  <Link href={`/partners/${partnerSlug}`} className="font-medium text-ink underline-offset-2 hover:text-brand hover:underline">
+                    {product.partner}
+                  </Link>
+                ) : (
+                  product.partner
+                )}
+              </p>
               <p className="mt-5 text-lg leading-relaxed text-muted">{product.description}</p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href={`/contact?interest=${encodeURIComponent(product.name)}`}>
+                <Button href={`/contact?interest=${encodeURIComponent(product.name)}`} showArrow>
                   Request information
                 </Button>
                 <Button href="/products" variant="outline">
                   Back to catalogue
                 </Button>
               </div>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
 
       <section className="py-16">
         <div className="container-page grid gap-10 lg:grid-cols-2">
-          <div>
+          <AnimatedSection>
             <h2 className="font-serif text-3xl text-ink">Applications</h2>
             <ul className="mt-5 space-y-2">
               {product.applications.map((item) => (
@@ -72,8 +90,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
                 </li>
               ))}
             </ul>
-          </div>
-          <div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.06}>
             <h2 className="font-serif text-3xl text-ink">Related solutions</h2>
             <ul className="mt-5 space-y-2">
               {relatedSolutions.map((solution) => (
@@ -92,7 +110,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
               Technical specifications are not published on this page. Request a data sheet or a
               conversation with the SNS Meditech team.
             </p>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 

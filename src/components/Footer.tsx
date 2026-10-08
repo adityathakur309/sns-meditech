@@ -1,10 +1,34 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "@/components/Logo";
 import { company, navLinks } from "@/data/company";
 import { solutions } from "@/data/solutions";
+import { cx } from "@/lib/utils";
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const pathname = usePathname();
+  const active =
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+
+  return (
+    <Link
+      href={href}
+      className={cx(
+        "group inline-flex text-sm text-white/70 transition-colors hover:text-white",
+        active && "text-white",
+      )}
+    >
+      <span className="relative">
+        {children}
+        <span className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-brand transition-transform duration-300 group-hover:scale-x-100" />
+      </span>
+    </Link>
+  );
+}
 
 export function Footer() {
-
   return (
     <footer className="bg-ink text-white">
       <div className="container-page grid gap-12 py-16 sm:py-20 md:grid-cols-2 lg:grid-cols-4">
@@ -19,9 +43,7 @@ export function Footer() {
           <ul className="mt-4 space-y-2.5">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-sm text-white/70 transition-colors hover:text-white">
-                  {link.label}
-                </Link>
+                <FooterLink href={link.href}>{link.label}</FooterLink>
               </li>
             ))}
           </ul>
@@ -31,12 +53,7 @@ export function Footer() {
           <ul className="mt-4 space-y-2.5">
             {solutions.slice(0, 6).map((solution) => (
               <li key={solution.slug}>
-                <Link
-                  href={`/solutions/${solution.slug}`}
-                  className="text-sm text-white/70 transition-colors hover:text-white"
-                >
-                  {solution.shortName}
-                </Link>
+                <FooterLink href={`/solutions/${solution.slug}`}>{solution.shortName}</FooterLink>
               </li>
             ))}
           </ul>
@@ -46,17 +63,17 @@ export function Footer() {
           <address className="mt-4 space-y-2.5 text-sm not-italic text-white/70">
             <p>{company.contact.address}</p>
             <p>
-              <a className="hover:text-white" href={`mailto:${company.contact.email}`}>
+              <a className="transition-colors hover:text-white" href={`mailto:${company.contact.email}`}>
                 {company.contact.email}
               </a>
             </p>
             <p>
-              <a className="hover:text-white" href={`tel:${company.contact.phoneRaw}`}>
+              <a className="transition-colors hover:text-white" href={`tel:${company.contact.phoneRaw}`}>
                 {company.contact.phone}
               </a>
             </p>
             <p>
-              <a className="hover:text-white" href={`tel:${company.contact.landlineRaw}`}>
+              <a className="transition-colors hover:text-white" href={`tel:${company.contact.landlineRaw}`}>
                 {company.contact.landline}
               </a>
             </p>

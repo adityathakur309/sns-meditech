@@ -43,7 +43,8 @@ export function validateContact(input: unknown): ValidationResult {
   if (!EMAIL_RE.test(data.email)) errors.email = "Please enter a valid email address.";
   if (data.message.length < 10) errors.message = "Please add a short message (at least 10 characters).";
   if (data.message.length > 4000) errors.message = "Message is too long.";
-  if (data.phone && !PHONE_RE.test(data.phone)) errors.phone = "Please enter a valid phone number.";
+  if (!data.phone) errors.phone = "Please enter your phone number.";
+  else if (!PHONE_RE.test(data.phone)) errors.phone = "Please enter a valid phone number.";
   const allowedInterest = new Set<string>([...interestOptions, ...products.map((product) => product.name)]);
   if (data.interestedIn && !allowedInterest.has(data.interestedIn)) {
     errors.interestedIn = "Please choose a valid interest.";

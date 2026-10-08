@@ -1,4 +1,5 @@
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { CapabilityCard } from "@/components/CapabilityCard";
 import { CTA } from "@/components/CTA";
 import { PageHero } from "@/components/PageHero";
 import { company } from "@/data/company";
@@ -80,10 +81,7 @@ export default function AboutPage() {
           </AnimatedSection>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {company.values.map((value, index) => (
-              <AnimatedSection key={value.title} delay={index * 0.04} className="border border-line bg-paper p-6">
-                <h3 className="text-lg font-semibold text-ink">{value.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{value.body}</p>
-              </AnimatedSection>
+              <CapabilityCard key={value.title} title={value.title} body={value.body} index={index} />
             ))}
           </div>
         </div>

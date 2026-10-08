@@ -24,8 +24,8 @@
   --color-mist: var(--mist);
   --color-paper: var(--paper);
   --color-line: var(--line);
-  --font-sans: var(--font-manrope);
-  --font-serif: var(--font-instrument);
+  --font-sans: var(--font-poppins);
+  --font-serif: var(--font-poppins);
 }
 
 html {
@@ -50,7 +50,83 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: color 0.2s ease;
+}
+
+.link-arrow:hover {
+  color: var(--brand);
+}
+
+.link-arrow [data-arrow] {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-arrow:hover [data-arrow] {
+  transform: translateX(4px);
+}
+
+.card-shine {
+  position: relative;
+}
+
+.card-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card-shine:hover::after,
+.card-shine:focus-within::after {
+  transform: translateX(120%);
+}
+
+.card-lift {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 44px -26px rgba(16, 24, 32, 0.38);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-shine::after {
+    display: none;
+  }
+
+  .card-lift:hover {
+    transform: none;
+  }
 }
 
 ::selection {

@@ -112,6 +112,7 @@ export const company = {
 } as const;
 
 export const navLinks = [
+  { href: "/", label: "Home" },
   { href: "/solutions", label: "Solutions" },
   { href: "/products", label: "Products" },
   { href: "/about", label: "About" },

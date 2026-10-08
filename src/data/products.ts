@@ -421,6 +421,17 @@ export function getProductsByCategory(category: string) {
   return products.filter((product) => product.category === category);
 }
 
+const partnerSlugToBrand: Record<string, Product["partner"]> = {
+  draeger: "Dräger",
+  erbe: "Erbe",
+};
+
+export function getProductsByPartnerSlug(slug: string) {
+  const brand = partnerSlugToBrand[slug];
+  if (!brand) return [];
+  return products.filter((product) => product.partner === brand);
+}
+
 export function getRelatedProducts(slug: string, limit = 3) {
   const product = getProduct(slug);
   if (!product) return products.slice(0, limit);

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { company } from "@/data/company";
+import { partners } from "@/data/partners";
 import { products } from "@/data/products";
 import { solutions } from "@/data/solutions";
 
@@ -22,6 +23,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${base}/products/${product.slug}`,
       changeFrequency: "monthly" as const,
       priority: 0.5,
+    })),
+    ...partners.map((partner) => ({
+      url: `${base}/partners/${partner.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.55,
     })),
   ];
 }
