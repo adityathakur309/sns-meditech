@@ -4,7 +4,10 @@ import { AnimatedSection } from "@/components/AnimatedSection";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/Button";
 import { CTA } from "@/components/CTA";
+import { ProductEnquiryBar } from "@/components/ProductEnquiryBar";
 import { ProductGallery } from "@/components/ProductGallery";
+import { company } from "@/data/company";
+import { contactEmailSectionHref, contactEnquiryHref } from "@/lib/contact-links";
 import { ProductGrid } from "@/components/ProductGrid";
 import { partners } from "@/data/partners";
 import { getProduct, getRelatedProducts, products } from "@/data/products";
@@ -43,8 +46,12 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
       (product.partner === "Erbe" && item.slug === "erbe"),
   )?.slug;
 
+  const enquireHref = contactEnquiryHref(product.name);
+  const emailHref = contactEmailSectionHref(product.name);
+
   return (
     <>
+      <div className="pb-24 lg:pb-0">
       <section className="bg-mist pt-28 pb-16 sm:pt-32">
         <div className="container-page">
           <Breadcrumbs items={[{ label: "Products", href: "/products" }, { label: product.name }]} />
@@ -66,11 +73,22 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
                 )}
               </p>
               <p className="mt-5 text-lg leading-relaxed text-muted">{product.description}</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href={`/contact?interest=${encodeURIComponent(product.name)}`} showArrow>
-                  Request information
+              <div className="mt-8 grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
+                <Button href={enquireHref} showArrow fullWidth className="sm:col-span-2 lg:col-span-1 lg:w-auto">
+                  Enquire Now
                 </Button>
-                <Button href="/products" variant="outline">
+                <a
+                  href={`tel:${company.contact.phoneRaw}`}
+                  className="hidden min-h-11 w-full items-center justify-center rounded-sm border border-ink/15 bg-transparent px-5 text-sm font-semibold tracking-wide text-ink transition-colors hover:border-brand hover:text-brand lg:inline-flex lg:w-auto"
+                >
+                  Call Now
+                </a>
+                <div className="hidden lg:block">
+                  <Button href={emailHref} variant="outline">
+                    Email Now
+                  </Button>
+                </div>
+                <Button href="/products" variant="outline" fullWidth className="sm:col-span-2 lg:col-span-1 lg:w-auto">
                   Back to catalogue
                 </Button>
               </div>
@@ -126,6 +144,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
       ) : null}
 
       <CTA title={`Ask about ${product.name}`} />
+      </div>
+      <ProductEnquiryBar productName={product.name} />
     </>
   );
 }

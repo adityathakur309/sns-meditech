@@ -23,6 +23,7 @@ type ButtonProps = {
   disabled?: boolean;
   onClick?: () => void;
   showArrow?: boolean;
+  fullWidth?: boolean;
 };
 
 export function Button({
@@ -34,11 +35,13 @@ export function Button({
   disabled,
   onClick,
   showArrow = false,
+  fullWidth = false,
 }: ButtonProps) {
   const reduce = useReducedMotion();
   const classes = cx(
     "group/btn relative inline-flex min-h-11 items-center justify-center gap-2 overflow-hidden rounded-sm px-5 text-sm font-semibold tracking-wide transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60",
     variants[variant],
+    fullWidth && "w-full",
     className,
   );
 
@@ -75,7 +78,7 @@ export function Button({
 
   if (href) {
     return (
-      <motion.div {...motionProps} className="inline-flex">
+      <motion.div {...motionProps} className={fullWidth ? "flex w-full" : "inline-flex"}>
         <Link href={href} className={classes} onClick={onClick}>
           {content}
         </Link>

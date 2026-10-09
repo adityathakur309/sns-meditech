@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { PageHero } from "@/components/PageHero";
 import { company } from "@/data/company";
+import { contactEmailSectionHref } from "@/lib/contact-links";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
@@ -23,12 +24,26 @@ export default function ContactPage() {
         <div className="container-page grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <h2 className="font-serif text-3xl text-ink">SNS Meditech</h2>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <a
+                href={`tel:${company.contact.phoneRaw}`}
+                className="inline-flex min-h-11 items-center justify-center rounded-sm bg-brand px-5 text-sm font-semibold tracking-wide text-white shadow-[0_10px_24px_-12px_rgba(240,124,0,0.8)] transition-colors hover:bg-brand-dark"
+              >
+                Call Now — {company.contact.phone}
+              </a>
+              <a
+                href={contactEmailSectionHref()}
+                className="inline-flex min-h-11 items-center justify-center rounded-sm border border-ink/15 px-5 text-sm font-semibold tracking-wide text-ink transition-colors hover:border-brand hover:text-brand"
+              >
+                Email details
+              </a>
+            </div>
             <address className="mt-6 space-y-4 text-sm not-italic leading-relaxed text-muted">
               <p>
                 <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-brand">Address</span>
                 {company.contact.address}
               </p>
-              <p>
+              <p id="contact-email">
                 <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-brand">Email</span>
                 <a className="text-ink hover:text-brand" href={`mailto:${company.contact.email}`}>
                   {company.contact.email}

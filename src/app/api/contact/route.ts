@@ -1,13 +1,6 @@
 import { Resend } from "resend";
+import { buildEnquiryEmail } from "@/lib/enquiry-email";
 import { validateContact } from "@/lib/validation";
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
 
 export async function POST(request: Request) {
   let json: unknown;
@@ -38,29 +31,7 @@ export async function POST(request: Request) {
 
   const { data } = result;
   const resend = new Resend(apiKey);
-
-  const rows = [
-    ["Full name", data.fullName],
-    ["Company / Hospital", data.company || "—"],
-    ["Designation", data.designation || "—"],
-    ["Email", data.email],
-    ["Phone", data.phone || "—"],
-    ["City", data.city || "—"],
-    ["Interested in", data.interestedIn || "—"],
-  ];
-
-  const html = `
-    <h1 style="font-family:Georgia,serif;font-size:20px;">New website enquiry</h1>
-    <table style="font-family:Arial,sans-serif;font-size:14px;border-collapse:collapse;">
-      ${rows
-        .map(
-          ([label, value]) =>
-            `<tr><td style="padding:6px 16px 6px 0;color:#5c6774;">${label}</td><td style="padding:6px 0;">${escapeHtml(value)}</td></tr>`,
-        )
-        .join("")}
-    </table>
-    <p style="font-family:Arial,sans-serif;font-size:14px;margin-top:20px;white-space:pre-wrap;">${escapeHtml(data.message)}</p>
-  `;
+  const { html, text } = buildEnquiryEmail(data);
 
   try {
     const { error } = await resend.emails.send({
@@ -69,6 +40,7 @@ export async function POST(request: Request) {
       replyTo: data.email,
       subject: `Website enquiry from ${data.fullName}${data.interestedIn ? ` — ${data.interestedIn}` : ""}`,
       html,
+      text,
     });
 
     if (error) {
