@@ -9,7 +9,7 @@ export function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
-const LOGO_URL = `${company.contact.website}/icon.png`;
+const LOGO_URL = 'https://www.snsmeditech.com/images/logo.svg';
 const BRAND = "#f07c00";
 const INK = "#101820";
 const MUTED = "#5c6774";
@@ -84,7 +84,7 @@ export function buildEnquiryEmail(data: ContactPayload, sentAt = new Date()) {
                 ${detailRow("Email", data.email)}
                 ${detailRow("Phone", data.phone)}
                 ${detailRow("Company / Hospital", data.company)}
-                ${detailRow("Designation", data.designation)}
+  
                 ${detailRow("City", data.city)}
                 ${data.interestedIn ? detailRow("Product / interest", data.interestedIn) : ""}
               </table>
